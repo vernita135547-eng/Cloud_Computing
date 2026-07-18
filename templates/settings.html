@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Settings</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+
+body{
+    background:#eef3f8;
+    font-family:'Segoe UI',sans-serif;
+}
+
+.sidebar{
+    position:fixed;
+    left:0;
+    top:0;
+    width:250px;
+    height:100vh;
+    background:#0d6efd;
+    color:white;
+}
+
+.sidebar h3{
+    text-align:center;
+    padding:25px;
+    border-bottom:1px solid rgba(255,255,255,.2);
+}
+
+.sidebar a{
+    display:block;
+    color:white;
+    text-decoration:none;
+    padding:15px 25px;
+    transition:.3s;
+}
+
+.sidebar a:hover{
+    background:#084298;
+}
+
+.main{
+    margin-left:250px;
+    padding:35px;
+}
+
+.card{
+    border:none;
+    border-radius:15px;
+    box-shadow:0 5px 15px rgba(0,0,0,.15);
+}
+
+input{
+    border-radius:10px !important;
+}
+
+.btn{
+    border-radius:10px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- Sidebar -->
+
+<div class="sidebar">
+
+<h3>☁ SecureDocs</h3>
+
+<a href="/dashboard">🏠 Dashboard</a>
+
+<a href="/upload">📤 Upload</a>
+
+<a href="/documents">📁 Documents</a>
+
+<a href="/profile">👤 Profile</a>
+
+<a href="/activity">📊 Activity</a>
+
+<a href="/analytics">📈 Analytics</a>
+
+<a href="/about">ℹ About</a>
+
+<a href="/settings">⚙ Settings</a>
+
+<a href="/logout">🚪 Logout</a>
+
+</div>
+
+<div class="main">
+
+<h2>⚙ Account Settings</h2>
+
+<p class="text-muted">
+Manage your account and security preferences.
+</p>
+
+<!-- Flash Messages -->
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category,message in messages %}
+
+<div class="alert alert-{{ category }} alert-dismissible fade show">
+
+{{ message }}
+
+<button
+type="button"
+class="btn-close"
+data-bs-dismiss="alert">
+</button>
+
+</div>
+
+{% endfor %}
+{% endif %}
+{% endwith %}
+
+<div class="row mt-4">
+
+<div class="col-md-7">
+
+<div class="card p-4">
+
+<h4>🔒 Change Password</h4>
+
+<hr>
+
+<form action="/change-password" method="POST">
+
+<div class="mb-3">
+
+<label class="form-label">
+
+Current Password
+
+</label>
+
+<input
+type="password"
+name="current_password"
+class="form-control"
+required>
+
+</div>
+
+<div class="mb-3">
+
+<label class="form-label">
+
+New Password
+
+</label>
+
+<input
+type="password"
+name="new_password"
+class="form-control"
+required>
+
+</div>
+
+<div class="mb-3">
+
+<label class="form-label">
+
+Confirm Password
+
+</label>
+
+<input
+type="password"
+name="confirm_password"
+class="form-control"
+required>
+
+</div>
+
+<button
+type="submit"
+class="btn btn-primary">
+
+Update Password
+
+</button>
+
+</form>
+
+</div>
+
+</div>
+
+<div class="col-md-5">
+
+<div class="card p-4 mb-3">
+
+<h4>👤 Account</h4>
+
+<hr>
+
+<p><strong>Username:</strong> {{ username }}</p>
+
+<p><strong>Role:</strong> Administrator</p>
+
+<p>
+
+<strong>Status:</strong>
+
+<span class="badge bg-success">
+
+Active
+
+</span>
+
+</p>
+
+</div>
+
+<div class="card p-4">
+
+<h4>☁ Cloud Storage</h4>
+
+<hr>
+
+<p><strong>Provider:</strong> AWS S3</p>
+
+<p>
+
+<strong>Connection:</strong>
+
+<span class="badge bg-success">
+
+Connected
+
+</span>
+
+</p>
+
+<p>
+
+<strong>Encryption:</strong>
+
+AES-256 Enabled
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<br>
+
+<a href="/dashboard" class="btn btn-secondary">
+
+← Back to Dashboard
+
+</a>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>
