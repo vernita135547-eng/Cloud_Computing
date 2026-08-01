@@ -2,18 +2,45 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
+import os
 from aws_config import get_s3_client
-
 
 app = Flask(__name__)
 
-app.secret_key = "super_secure_cloud_secret_key"
-
+app.secret_key = os.getenv("SECRET_KEY", "super_secure_cloud_secret_key")
 
 # AWS S3 Bucket Name
-S3_BUCKET_NAME = "secure-cloud-document-vernita-2026"
+S3_BUCKET_NAME = os.getenv("S3_BUCKET", "secure-cloud-document-vernita-2026")
 
 
+def create_tables():
+    conn = sqlite3.connect("database.db")
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT UNIQUE NOT NULL,
+            password TEXT NOT NULL
+        )
+    """)
+
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS documents (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL,
+            filename TEXT NOT NULL,
+            s3_path TEXT NOT NULL,
+            upload_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY(user_id) REFERENCES users(id)
+        )
+    """)
+
+    conn.commit()
+    conn.close()
+
+
+create_tables()
 
 def get_db_connection():
 
@@ -558,11 +585,5 @@ def logout():
 
     return redirect(url_for("login"))
 
-
-
-
-
-
-if __name__=="__main__":
-
+if __name__ == "__main__":
     app.run(debug=True)
